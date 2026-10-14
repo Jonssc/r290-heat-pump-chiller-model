@@ -1,10 +1,10 @@
-        # R290 Heat Pump–Chiller Performance and Optimisation Model
+# R290 Heat Pump–Chiller Performance and Optimisation Model
 
 ## Overview
 
 This repository contains the Python model developed for the master's thesis:
 
-**Performance Analysis and Optimization of a Reversible R290 Heat Pump–Chiller System**
+**Performance Analysis and Optimization of a Reversible R-290 Heat Pump–Chiller System**
 
 The model was developed to analyse the field performance of a three-unit reversible air-to-water heat pump–chiller plant using propane (R-290), validate a manufacturer-based compressor representation against measured operating data, and investigate operational and system-level improvement measures.
 
@@ -55,13 +55,11 @@ The project requires:
 | `pandas` | 2.0 | data processing, filtering, aggregation and table handling |
 | `matplotlib` | 3.7 | plotting and thesis figures |
 | `openpyxl` | 3.1 | reading and writing Excel `.xlsx` files |
-| `scipy` | 1.10 | interpolation for performance-map plotting |
-
 
 Install the required packages with:
 
 ```bash
-python -m pip install "numpy>=1.24" "pandas>=2.0" "matplotlib>=3.7" "openpyxl>=3.1" "scipy>=1.10"
+python -m pip install "numpy>=1.24" "pandas>=2.0" "matplotlib>=3.7" "openpyxl>=3.1"
 ```
 
 A virtual environment is recommended.
@@ -72,7 +70,7 @@ A virtual environment is recommended.
 python -m venv .venv
 .venv\Scripts\activate
 python -m pip install --upgrade pip
-python -m pip install "numpy>=1.24" "pandas>=2.0" "matplotlib>=3.7" "openpyxl>=3.1" "scipy>=1.10"
+python -m pip install "numpy>=1.24" "pandas>=2.0" "matplotlib>=3.7" "openpyxl>=3.1"
 ```
 
 ### macOS / Linux example
@@ -81,7 +79,7 @@ python -m pip install "numpy>=1.24" "pandas>=2.0" "matplotlib>=3.7" "openpyxl>=3
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
-python -m pip install "numpy>=1.24" "pandas>=2.0" "matplotlib>=3.7" "openpyxl>=3.1" "scipy>=1.10"
+python -m pip install "numpy>=1.24" "pandas>=2.0" "matplotlib>=3.7" "openpyxl>=3.1"
 ```
 
 ---
@@ -91,7 +89,7 @@ python -m pip install "numpy>=1.24" "pandas>=2.0" "matplotlib>=3.7" "openpyxl>=3
 The repository is organised around the following main folders:
 
 ```text
-r290-heat-pump-chiller-model/
+R290_Thesis_V2/
 │
 ├── 00_CONFIG/
 │   └── common configuration and table input/output helpers
@@ -372,6 +370,15 @@ The model should be interpreted within the following limitations:
 ---
 
 ## Confidential and non-distributed material
+
+The public `00_CONFIG/config.py` intentionally sets the eight field-calibrated
+heat-exchanger fallback coefficients and approach temperatures to `None` to avoid
+publishing installation-specific calibration results. Both reference fan-speed
+fractions remain at `1.00`. For a full model run, first supply authorized input
+data and generate the calibration table, or provide an authorized calibration file
+under `06_RESULTS/databases/hera_hx_calibration.csv`. These public placeholders
+are not the field-calibrated parameter values used in the thesis calculations.
+
 
 The public repository intentionally excludes:
 
