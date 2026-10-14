@@ -281,14 +281,15 @@ def contour_level_spec(z_name, finite_values):
     zmax = float(np.nanmax(finite_values))
 
     if "frequency" in z_key or z_key.endswith("_hz"):
-        step = max(1, int(np.ceil((zmax - zmin) / 8.0)))
-        start = int(np.floor(zmin))
-        end = int(np.ceil(zmax))
-        start = step * int(np.floor(start / step))
-        end = step * int(np.ceil(end / step))
-        if end <= start:
-            end = start + step
-        levels = np.arange(start, end + step, step, dtype=float)
+        # All compressor-frequency contour plots use one common physical scale.
+        # The compressor model is constrained to the configured 30-70 Hz range,
+        # so data-driven rounding must never create a 72 Hz colourbar endpoint
+        # or truncate a plot at 60 Hz merely because that case does not require
+        # higher frequencies.
+        start = float(config.FREQUENCY_MIN_HZ)
+        end = float(config.FREQUENCY_MAX_HZ)
+        step = 5.0
+        levels = np.arange(start, end + 0.5 * step, step, dtype=float)
         fmt = "%.0f"
         ticks = levels
     else:

@@ -119,7 +119,7 @@ def levels(values, step):
     return np.arange(start, end + 0.5 * step, step)
 
 
-def contour(data, *, x_column, y_column, value_column, title, xlabel, ylabel, cbar_label, filename, step, decimals):
+def contour(data, *, x_column, y_column, value_column, title, xlabel, ylabel, cbar_label, filename, step, decimals, max_cbar_ticks=None):
     pivot = prepare_pivot(data, x_column, y_column, value_column)
     if pivot is None:
         return
@@ -137,7 +137,15 @@ def contour(data, *, x_column, y_column, value_column, title, xlabel, ylabel, cb
     ax.clabel(lines, inline=True, fontsize=7.5, fmt=f'%.{decimals}f')
     cbar = fig.colorbar(filled, ax=ax, extend='neither')
     cbar.set_label(cbar_label)
-    cbar.set_ticks(colorbar_ticks_with_endpoints(lev, cbar.get_ticks()))
+    if max_cbar_ticks is not None and len(lev) > max_cbar_ticks:
+        # Select a limited number of level values across the complete range.
+        # This prevents endpoint labels such as -62/-60 and 20/24 from
+        # overlapping on wide electrical-saving colour scales.
+        idx = np.linspace(0, len(lev) - 1, int(max_cbar_ticks), dtype=int)
+        cbar_ticks = lev[np.unique(idx)]
+    else:
+        cbar_ticks = colorbar_ticks_with_endpoints(lev, cbar.get_ticks())
+    cbar.set_ticks(cbar_ticks)
     cbar.ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda v, pos: f'{v:.{decimals}f}'))
     style.style_axis(ax, title=title, xlabel=xlabel, ylabel=ylabel, grid_axis='none')
     apply_ua_axis_limits(ax, x_column, y_column)
@@ -153,7 +161,7 @@ def main():
     contour(air_heating, x_column='air_UA_multiplier', y_column='fan_speed_fraction', value_column='COP_or_EER_circuit', title='Heating: air-side UA and fan-speed efficiency', xlabel='Air-side effective UA multiplier [-]', ylabel='Fan-speed multiplier [-]', cbar_label='Circuit COP [-]', filename='14_heating_COP_vs_air_UA_vs_fan.png', step=0.2, decimals=1)
     contour(air_cooling, x_column='air_UA_multiplier', y_column='fan_speed_fraction', value_column='COP_or_EER_circuit', title='Cooling: air-side UA and fan-speed efficiency', xlabel='Air-side effective UA multiplier [-]', ylabel='Fan-speed multiplier [-]', cbar_label='Circuit EER [-]', filename='15_cooling_EER_vs_air_UA_vs_fan.png', step=0.2, decimals=1)
     contour(air_heating, x_column='air_UA_multiplier', y_column='fan_speed_fraction', value_column='electrical_saving_vs_reference_percent', title='Heating: electricity saving from air-side UA and fan speed', xlabel='Air-side effective UA multiplier [-]', ylabel='Fan-speed multiplier [-]', cbar_label='Electrical saving vs reference [%]', filename='16_heating_saving_vs_air_UA_vs_fan.png', step=2.0, decimals=0)
-    contour(air_cooling, x_column='air_UA_multiplier', y_column='fan_speed_fraction', value_column='electrical_saving_vs_reference_percent', title='Cooling: electricity saving from air-side UA and fan speed', xlabel='Air-side effective UA multiplier [-]', ylabel='Fan-speed multiplier [-]', cbar_label='Electrical saving vs reference [%]', filename='17_cooling_saving_vs_air_UA_vs_fan.png', step=2.0, decimals=0)
+    contour(air_cooling, x_column='air_UA_multiplier', y_column='fan_speed_fraction', value_column='electrical_saving_vs_reference_percent', title='Cooling: electricity saving from air-side UA and fan speed', xlabel='Air-side effective UA multiplier [-]', ylabel='Fan-speed multiplier [-]', cbar_label='Electrical saving vs reference [%]', filename='17_cooling_saving_vs_air_UA_vs_fan.png', step=2.0, decimals=0, max_cbar_ticks=8)
     contour(water_heating, x_column='water_UA_multiplier', y_column='water_flow_fraction', value_column='electrical_saving_vs_reference_percent', title='Heating: electricity saving from water-side UA and flow', xlabel='Water-side effective UA multiplier [-]', ylabel='Water-flow / pump-speed fraction [-]', cbar_label='Electrical saving [%]', filename='18_heating_saving_vs_water_UA_vs_flow_with_pump.png', step=2.0, decimals=0)
     contour(water_cooling, x_column='water_UA_multiplier', y_column='water_flow_fraction', value_column='electrical_saving_vs_reference_percent', title='Cooling: electricity saving from water-side UA and flow', xlabel='Water-side effective UA multiplier [-]', ylabel='Water-flow / pump-speed fraction [-]', cbar_label='Electrical saving [%]', filename='19_cooling_saving_vs_water_UA_vs_flow_with_pump.png', step=2.0, decimals=0)
 

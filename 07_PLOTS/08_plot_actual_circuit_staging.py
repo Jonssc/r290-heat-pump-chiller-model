@@ -8,6 +8,7 @@ from pathlib import Path
 import importlib.util
 import sys
 
+import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
@@ -61,7 +62,7 @@ def main():
     if configuration.empty:
         return
 
-    fig, ax = plt.subplots(figsize=(9.5, 5.6))
+    fig, ax = plt.subplots(figsize=(9.5, 6.1))
     pivot = configuration.pivot_table(
         index='unit', columns='active_configuration', values='stable_periods',
         aggfunc='sum', fill_value=0,
@@ -75,6 +76,11 @@ def main():
         ylabel='Stable periods [-]',
         grid_axis='y',
     )
+    # Leave explicit headroom for the vertical bar-value labels. Without this,
+    # the largest bar count reaches beyond the top axis boundary.
+    max_count = float(np.nanmax(pivot.to_numpy(dtype=float)))
+    if np.isfinite(max_count) and max_count > 0:
+        ax.set_ylim(0.0, max_count * 1.18)
     ax.legend(title='Configuration', loc='upper left', bbox_to_anchor=(1.01, 1.0), borderaxespad=0.0)
     style.save_figure(
         fig, OUTPUT_FOLDER / '07_observed_circuit_configurations.png',
