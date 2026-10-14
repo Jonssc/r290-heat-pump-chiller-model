@@ -15,7 +15,7 @@ RULES
 # 1. PROJECT IDENTIFICATION
 # ============================================================
 
-MODEL_VERSION = "1.0"
+MODEL_VERSION = "1.1.0"
 REFRIGERANT = "R290"
 COMPRESSOR_MODEL = "Frascold V30-84AXHT"
 
@@ -136,22 +136,24 @@ MAX_FAN_DESIGN_MULTIPLIER = 1.50
 # Fan electrical power follows the existing cubic-law screening relation.
 CYCLING_DEGRADATION_COEFFICIENT = 0.15
 
-# Field-calibrated fallback values from the existing validated analytical model.
-# They are used only if the new calibration table has not yet been generated.
+# The field-derived fallback calibration values are intentionally excluded
+# from the public version. Run the calibration step with authorized input data
+# before running analyses, or provide your own permitted calibration database.
+# The reference fan-speed fractions are modelling assumptions, not field data.
 HERA_FALLBACK_CALIBRATION = {
     "heating": {
-        "air_UA_100_kW_K": ,
-        "water_UA_kW_K": ,
-        "reference_air_approach_K": ,
-        "reference_water_approach_K": ,
-        "reference_fan_speed_fraction": ,
+        "air_UA_100_kW_K": None,
+        "water_UA_kW_K": None,
+        "reference_air_approach_K": None,
+        "reference_water_approach_K": None,
+        "reference_fan_speed_fraction": 1.00,
     },
     "cooling": {
-        "air_UA_100_kW_K": ,
-        "water_UA_kW_K": ,
-        "reference_air_approach_K": ,
-        "reference_water_approach_K": ,
-        "reference_fan_speed_fraction": ,
+        "air_UA_100_kW_K": None,
+        "water_UA_kW_K": None,
+        "reference_air_approach_K": None,
+        "reference_water_approach_K": None,
+        "reference_fan_speed_fraction": 1.00,
     },
 }
 
@@ -159,8 +161,8 @@ HERA_FALLBACK_CALIBRATION = {
 # 7. ANNUAL SETTINGS
 # ============================================================
 
-ANNUAL_START_DATE = "2025-08-11"
-ANNUAL_END_DATE_EXCLUSIVE = "2026-08-11"
+ANNUAL_START_DATE = "2025-10-01"
+ANNUAL_END_DATE_EXCLUSIVE = "2026-10-01"
 
 # ============================================================
 # 8. OUTPUT SETTINGS
@@ -192,15 +194,23 @@ HEATING_WATER_TEMP_STUDY_C = [
 ]
 
 COOLING_WATER_TEMP_STUDY_C = [
-    5.0, 6.0, 7.0, 8.0, 10.0, 12.0
+    5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0
 ]
 
+# Use a regular 1 K grid so the outdoor-temperature sensitivity plots have
+# evenly spaced evaluated model points. Infeasible points are still retained
+# in the result table and filtered from the final plot in the usual way.
 HEATING_OUTDOOR_TEMP_STUDY_C = [
-    -15.0, -10.0, -7.0, -5.0, 0.0, 2.0, 7.0, 12.0, 15.0
+    -15.0, -14.0, -13.0, -12.0, -11.0, -10.0, -9.0, -8.0, -7.0, -6.0,
+    -5.0, -4.0, -3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0, 4.0,
+    5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0
 ]
 
 COOLING_OUTDOOR_TEMP_STUDY_C = [
-    10.0, 15.0, 20.0, 25.0, 30.0, 35.0, 40.0, 45.0
+    10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0, 18.0, 19.0,
+    20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0,
+    30.0, 31.0, 32.0, 33.0, 34.0, 35.0, 36.0, 37.0, 38.0, 39.0,
+    40.0, 41.0, 42.0, 43.0, 44.0, 45.0
 ]
 
 FOULING_UA_MULTIPLIERS = [
@@ -294,8 +304,8 @@ BUFFER_LOAD_FRACTIONS_OF_QMIN = [
 # 13. CARNOT / SECOND-LAW SETTINGS
 # ============================================================
 
-CARNOT_START_DATE = "2026-07-01"
-CARNOT_END_DATE_EXCLUSIVE = "2026-08-01"
+CARNOT_START_DATE = "2026-07-07"
+CARNOT_END_DATE_EXCLUSIVE = "2026-10-01"
 
 # The external/system-level Carnot benchmark uses outdoor dry-bulb and the
 # arithmetic mean of entering/leaving water temperature. It is a reservoir
@@ -398,7 +408,7 @@ STANDARD_COOLING_BIN_HOURS = {
 
 # All matching annual raw exports are merged chronologically. Overlapping
 # timestamps are de-duplicated, keeping the value from the later file.
-ANNUAL_RAW_GLOB = "Kiona_Annual_*.csv"
+ANNUAL_RAW_GLOB = "Kiona_annual_*.csv"
 
 ANNUAL_SIGNAL_VALID_FROM = {
     "SH_320001_OE405_VS_PV": "2026-05-21 10:45:00",
@@ -423,7 +433,7 @@ ANNUAL_TREND_ROLLING_BINS = 5
 ANNUAL_MONTHLY_START_YEAR = 2026
 ANNUAL_MONTHLY_START_MONTH = 2
 ANNUAL_MONTHLY_END_YEAR = 2026
-ANNUAL_MONTHLY_END_MONTH = 7
+ANNUAL_MONTHLY_END_MONTH = 9
 
 
 # ============================================================
@@ -433,7 +443,7 @@ ANNUAL_MONTHLY_END_MONTH = 7
 HYBRID_START_YEAR = 2026
 HYBRID_START_MONTH = 2
 HYBRID_END_YEAR = 2026
-HYBRID_END_MONTH = 7
+HYBRID_END_MONTH = 9
 HYBRID_ACTIVE_LOAD_THRESHOLD_KW = 5.0
 
 
