@@ -92,8 +92,8 @@ def main():
             if air_app <= 0.5 or water_app <= 0.5:
                 continue
 
-            # Validation does not use unreliable fan-start tags. For calibration,
-            # normalize with the already established reference fan fraction.
+            # The reference fan-speed fraction is an assumption, not a
+            # measured fan-speed correction.
             fan_fraction = config.HERA_FALLBACK_CALIBRATION[mode]["reference_fan_speed_fraction"]
             ua_air_obs = qair/air_app
             ua_air_100 = ua_air_obs / fan_fraction**config.AIR_HT_EXPONENT
@@ -124,7 +124,7 @@ def main():
         if len(g) >= MIN_CIRCUIT_POINTS_TO_ACCEPT_FIELD_CALIBRATION:
             summary.append({
                 "mode": mode,
-                "source": "field calibration from Kiona stable periods + validation",
+                "source": "field calibration from Kiona stable periods and Frascold map",
                 "n_circuit_points": len(g),
                 "air_UA_100_kW_K": g["UA_air_100_kW_K"].median(),
                 "water_UA_ref_kW_K": g["UA_water_kW_K"].median(),
@@ -135,7 +135,7 @@ def main():
         else:
             summary.append({
                 "mode": mode,
-                "source": "fallback from previously validated analytical model",
+                "source": "fallback analytical-model values (not independently validated)",
                 "n_circuit_points": len(g),
                 "air_UA_100_kW_K": fallback["air_UA_100_kW_K"],
                 "water_UA_ref_kW_K": fallback["water_UA_kW_K"],

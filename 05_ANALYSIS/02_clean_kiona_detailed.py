@@ -29,7 +29,7 @@ KIONA_TAG_FILE = PROJECT_ROOT / "00_CONFIG" / "kiona_tags.py"
 TABLE_IO_FILE = PROJECT_ROOT / "00_CONFIG" / "table_io.py"
 
 INPUT_KIONA_FOLDER = PROJECT_ROOT / "01_RAW_DATA" / "Kiona"
-INPUT_FILE_GLOB = "Kiona_Detailed_*.csv"
+INPUT_FILE_GLOB = "Kiona_detailed_*.csv"
 OUTPUT_CLEAN_DATA = PROJECT_ROOT / "02_PROCESSED_DATA" / "kiona_detailed_clean"
 
 
@@ -105,7 +105,7 @@ def main():
     if not files:
         raise FileNotFoundError(
             f"No files matched {INPUT_FILE_GLOB} in {INPUT_KIONA_FOLDER}.\n"
-            "Recommended current filename: Kiona_Detailed_5min_2026.csv"
+            "Expected prefix: Kiona_detailed_ (e.g. Kiona_detailed_2026-07-07_to_2026-09-30.csv.csv)"
         )
 
     parts = [read_kiona_csv(path) for path in files]

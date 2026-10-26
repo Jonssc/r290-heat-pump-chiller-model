@@ -1,7 +1,7 @@
 """
 04_validate_kiona_frascold.py
 
-Validation analysis using the processed Kiona stable-period table and the
+Electrical field-comparison analysis using the Kiona stable-period table and the
 already-generated Frascold master database. No plots are generated here.
 """
 
@@ -113,7 +113,7 @@ def estimate_fan_power(capacity_request, active_count):
 def diagnostic_best_fit_frequency(fmap, circuit_conditions, target_compressor_power_kW):
     """Back-calculate a common compressor frequency for diagnostic plots only.
 
-    This uses measured Kiona power and therefore is NOT a validation input. It
+    This uses measured Kiona power and therefore is NOT independent evidence. It
     is only used to test whether the provisional frequency reconstruction can
     explain part of the power residual.
     """
@@ -347,7 +347,7 @@ def main():
         ["frequency_method", config.VALIDATION_FREQUENCY_METHOD, "Measured frequency preferred if available; otherwise provisional mapping"],
         ["fan_method", config.VALIDATION_FAN_METHOD, "Normal outdoor-coil fans only"],
         ["fan_rated_unit_kW", config.FAN_RATED_POWER_UNIT_KW, "Four EC fans total"],
-        ["external_pump_included", config.VALIDATION_INCLUDE_EXTERNAL_PUMP, "External pumps excluded from validation boundary"],
+        ["external_pump_included", config.VALIDATION_INCLUDE_EXTERNAL_PUMP, "External pumps excluded from field-comparison boundary"],
         ["atmospheric_pressure_bar", config.ATMOSPHERIC_PRESSURE_BAR, "Added to Kiona gauge pressures"],
     ], columns=["parameter", "value", "note"])
 
