@@ -1,7 +1,7 @@
 """
 04_plot_validation.py
 
-Publication-style validation plots. The validation calculation is not repeated.
+Publication-style electrical field-comparison plots. Calculations are not repeated.
 """
 
 # ============================================================
@@ -161,7 +161,7 @@ def main():
             ax.set_aspect("equal", adjustable="box")
             style.style_axis(
                 ax,
-                "Electrical-power validation",
+                "Electrical-power field comparison",
                 "Frascold compressors + unit fans [kW]",
                 "Kiona chiller-unit power [kW]",
             )
@@ -212,7 +212,7 @@ def main():
             ax.axhline(0, color="black", linestyle="--", linewidth=1.2)
             style.style_axis(
                 ax,
-                "Validation residual vs predicted power",
+                "Field-comparison residual vs predicted power",
                 "Frascold compressors + unit fans [kW]",
                 "Kiona − model [kW]",
             )
@@ -248,7 +248,7 @@ def main():
             ax.axhline(0, color="black", linestyle="--", linewidth=1.2)
             style.style_axis(
                 ax,
-                "Load-dependent validation residual",
+                "Load-dependent field-comparison residual",
                 "Kiona capacity request [%]",
                 "Kiona − model [kW]",
             )
