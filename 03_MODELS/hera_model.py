@@ -52,7 +52,7 @@ class CircuitModel:
         frascold_lookup,
         calibrations: Dict[str, ModeCalibration],
         fan_rated_unit_kW: float = 1.34,
-        air_ht_exponent: float = 0.60,
+        air_ht_exponent: float = 0.80,
         water_ht_exponent: float = 0.80,
         max_fan_multiplier: float = 1.30,
     ):

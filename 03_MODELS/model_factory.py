@@ -54,7 +54,7 @@ def load_calibrations(
     for mode, values in fallback_calibration.items():
         calibrations[mode] = hera_module.ModeCalibration(
             mode=mode,
-            source="fallback from previously validated analytical model",
+            source="fallback from current field-calibrated reference (not independent validation)",
             air_UA_100_kW_K=float(values["air_UA_100_kW_K"]),
             water_UA_ref_kW_K=float(values["water_UA_kW_K"]),
             reference_air_approach_K=float(values["reference_air_approach_K"]),
