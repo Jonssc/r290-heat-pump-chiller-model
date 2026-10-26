@@ -15,7 +15,7 @@ RULES
 # 1. PROJECT IDENTIFICATION
 # ============================================================
 
-MODEL_VERSION = "1.1.0"
+MODEL_VERSION = "1.2.0"
 REFRIGERANT = "R290"
 COMPRESSOR_MODEL = "Frascold V30-84AXHT"
 
@@ -111,9 +111,10 @@ FAN_RATED_POWER_PER_CIRCUIT_KW = FAN_RATED_POWER_UNIT_KW / 2.0
 # No external hydronic pump is included in the chiller validation boundary.
 VALIDATION_INCLUDE_EXTERNAL_PUMP = False
 
-# When no reliable fan-speed measurement exists, this proxy is used only as a
-# screening approximation and is written to every validation row.
-VALIDATION_FAN_METHOD = "capacity_proxy"  # capacity_proxy | rated_per_active_circuit
+# Reference fan fraction is 1.00 for the baseline field comparison,
+# consistent with Sections 6.6 and 8.2 of the thesis. The capacity-request
+# proxy remains available as an explicitly selected sensitivity only.
+VALIDATION_FAN_METHOD = "rated_per_active_circuit"  # capacity_proxy | rated_per_active_circuit
 
 
 # ============================================================
@@ -128,7 +129,9 @@ FREQUENCY_MIN_HZ = 30.0
 FREQUENCY_MAX_HZ = 70.0
 FREQUENCY_STEP_HZ = 2.5
 
-AIR_HT_EXPONENT = 0.60
+# The same 0.80 baseline is used in the general, annual and hybrid models.
+# A 0.60 exponent is an alternative sensitivity assumption, not the baseline.
+AIR_HT_EXPONENT = 0.80
 WATER_HT_EXPONENT = 0.80
 MAX_FAN_DESIGN_MULTIPLIER = 1.50
 # Values above 1.00 are hypothetical fan-design / oversizing sensitivity,
@@ -136,23 +139,22 @@ MAX_FAN_DESIGN_MULTIPLIER = 1.50
 # Fan electrical power follows the existing cubic-law screening relation.
 CYCLING_DEGRADATION_COEFFICIENT = 0.15
 
-# The field-derived fallback calibration values are intentionally excluded
-# from the public version. Run the calibration step with authorized input data
-# before running analyses, or provide your own permitted calibration database.
-# The reference fan-speed fractions are modelling assumptions, not field data.
+# Field-calibrated fallback values reproduced from the accepted July–September
+# quasi-steady dataset (258 HP1 and 56 HP2 periods). Used only when the
+# generated calibration table is not available. Not independent validation.
 HERA_FALLBACK_CALIBRATION = {
     "heating": {
-        "air_UA_100_kW_K": None,
-        "water_UA_kW_K": None,
-        "reference_air_approach_K": None,
-        "reference_water_approach_K": None,
+        "air_UA_100_kW_K": 3.342186,
+        "water_UA_kW_K": 13.333867,
+        "reference_air_approach_K": 11.758203,
+        "reference_water_approach_K": 3.920841,
         "reference_fan_speed_fraction": 1.00,
     },
     "cooling": {
-        "air_UA_100_kW_K": None,
-        "water_UA_kW_K": None,
-        "reference_air_approach_K": None,
-        "reference_water_approach_K": None,
+        "air_UA_100_kW_K": 4.058173,
+        "water_UA_kW_K": 5.734344,
+        "reference_air_approach_K": 14.588490,
+        "reference_water_approach_K": 8.378603,
         "reference_fan_speed_fraction": 1.00,
     },
 }
@@ -451,10 +453,9 @@ HYBRID_ACTIVE_LOAD_THRESHOLD_KW = 5.0
 # 17. ANNUAL RECONSTRUCTION / PLANT SETTINGS
 # ============================================================
 
-# The previously validated annual / hybrid / mixed-size scripts used 0.80.
-# Keep this annual-study assumption explicit instead of silently using
-# the 0.60 exponent employed by some general parametric studies.
-ANNUAL_AIR_HT_EXPONENT = 0.80
+# Use the same baseline exponent as the other circuit-model analyses.
+# Keep the variable for compatibility with annual/hybrid analysis scripts.
+ANNUAL_AIR_HT_EXPONENT = AIR_HT_EXPONENT
 
 
 ANNUAL_RECONSTRUCTION_MIN_COMPONENT_BIN_SAMPLES = 12
